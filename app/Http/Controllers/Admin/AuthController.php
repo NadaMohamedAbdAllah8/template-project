@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Auth\LoginRequest;
 use App\Http\Resources\AdminResource;
 use App\Models\Admin;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -41,18 +42,18 @@ class AuthController extends Controller
 
             // return token in json response
             return response()->json([
-                'code' => 200,
+                'code' => Response::HTTP_OK,
                 'message' => 'Logged in!',
                 'validation' => null,
                 'data' => [
                     'admin' => new AdminResource($admin),
                 ],
             ]);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             DB::rollback();
 
             return response()->json([
-                'code' => 500,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Error!',
                 'validation' => null,
                 'data' => [],
@@ -74,16 +75,16 @@ class AuthController extends Controller
 
             // return token in json response
             return response()->json([
-                'code' => 200,
+                'code' => Response::HTTP_OK,
                 'message' => 'Logged out!',
                 'validation' => null,
                 'data' => [],
             ]);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             DB::rollback();
 
             return response()->json([
-                'code' => 500,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Error!',
                 'validation' => null,
                 'data' => [],

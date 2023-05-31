@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request, RegisterAction $register_action)
-    : JsonResponse {
+    : JsonResponse{
 
         DB::beginTransaction();
 
@@ -27,18 +27,18 @@ class AuthController extends Controller
             DB::commit();
 
             return response()->json([
-                'code' => 200,
+                'code' => Response::HTTP_OK,
                 'message' => 'Registered!',
                 'validation' => null,
                 'data' => ['user' => $user,
                     'token' => $token],
             ]);
 
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             DB::rollback();
 
             return response()->json([
-                'code' => 500,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Error!',
                 'validation' => null,
                 'data' => [],
@@ -59,17 +59,17 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'code' => 200,
+                'code' => Response::HTTP_OK,
                 'message' => 'Logged In!',
                 'validation' => null,
                 'data' => [
                     'access_token' => $token,
                     'token_type' => 'Bearer'],
             ]);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
 
             return response()->json([
-                'code' => 500,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Error!',
                 'validation' => null,
                 'data' => [],
@@ -82,15 +82,14 @@ class AuthController extends Controller
         try {auth()->user()->tokens()->delete();
 
             return response()->json([
-                'code' => 200,
+                'code' => Response::HTTP_OK,
                 'message' => 'Logged out!',
                 'validation' => null,
                 'data' => [],
             ]);
-        } catch (\Exception$e) {
-
+        } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Error!',
                 'validation' => null,
                 'data' => [],
